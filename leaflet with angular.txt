@@ -61,3 +61,39 @@ export class MapComponent {
 }
 
 ----------------------------------------------------------------------------------------------------------------------------------
+EXTRAS:
+--LAYERS:
+// Initialize the map with a base layer and set the view
+private map: any;
+this.map = L.map('map').setView([39.73, -104.99], 10);
+
+var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '© OpenStreetMap'
+}).addTo(this.map);
+
+// Create markers for cities
+var littleton = L.marker([39.61, -105.02]).bindPopup('This is Littleton, CO.'),
+    denver = L.marker([39.74, -104.99]).bindPopup('This is Denver, CO.'),
+    aurora = L.marker([39.73, -104.8]).bindPopup('This is Aurora, CO.'),
+    golden = L.marker([39.77, -105.23]).bindPopup('This is Golden, CO.');
+
+var cities = L.layerGroup([littleton, denver, aurora, golden]);
+
+// Create markers for parks
+var crownHill = L.marker([39.75, -105.09]).bindPopup('This is Crown Hill Park.'),
+    rubyHill = L.marker([39.68, -105.00]).bindPopup('This is Ruby Hill Park.');
+
+var parks = L.layerGroup([crownHill, rubyHill]);
+
+// Add layer control for only the overlay layers
+var overlayMaps = {
+  "Cities": cities,
+  "Parks": parks
+};
+
+var layerControl = L.control.layers(null, overlayMaps).addTo(this.map);
+
+// Initial view with the base layer
+osm.addTo(this.map);
+------------------------------------------------------------------------------------------------
