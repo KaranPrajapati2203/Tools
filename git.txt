@@ -1,0 +1,18 @@
+# Initialize Git
+git init
+
+# Add the remote repository
+git remote add origin https://github.com/KaranPrajapati2203/Tools.git
+
+(Optional)
+# Rename the branch to main if necessary
+git branch -m master main
+
+# Stage all files for commit
+git add .
+
+# Commit the changes
+git commit -m "Initial commit"
+
+# Push the changes to the GitHub repository and set the upstream branch
+git push -u origin master OR git push -u origin main
