@@ -1,6 +1,13 @@
 npm install leaflet
 npm install @types/leaflet
 
+-- in angular.json -------------------------------------------------------------------
+
+"styles": [
+     "node_modules/leaflet/dist/leaflet.css",
+     "src/styles.css"
+    ]
+
 -- in index.html  (https://leafletjs.com/examples/quick-start/):----------------------------------------------------------------------------
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
