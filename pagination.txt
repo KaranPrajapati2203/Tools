@@ -1,0 +1,410 @@
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+export interface Employee {
+  id: number;
+  name: string;
+  email: string;
+  phone: number;
+  status: string;
+  position: string;
+  joiningdate: string;
+  assignedprojectids: number[];
+}
+export interface Project {
+  id: number;
+  name: string;
+  status: string;
+}
+@Injectable({
+  providedIn: 'root'
+})
+export class PmsService {
+  private employeesData: Employee[] = [
+    { id: 1, name: 'Rajesh Sharma', email: 'rajesh.sharma@gmail.com', phone: 9876543210, status: 'active', position: 'developer', joiningdate: '2024-12-01', assignedprojectids: [] },
+    { id: 2, name: 'Anita Verma', email: 'anita.verma@gmail.com', phone: 9123456789, status: 'inactive', position: 'manager', joiningdate: '2023-05-15', assignedprojectids: [3] },
+    { id: 3, name: 'Karan Mehta', email: 'karan.mehta@gmail.com', phone: 9823456781, status: 'active', position: 'tester', joiningdate: '2022-11-20', assignedprojectids: [1] },
+    { id: 4, name: 'Neha Gupta', email: 'neha.gupta@gmail.com', phone: 8562347895, status: 'active', position: 'developer', joiningdate: '2021-09-10', assignedprojectids: [2, 3] },
+    { id: 5, name: 'Ravi Singh', email: 'ravi.singh@gmail.com', phone: 7543216987, status: 'inactive', position: 'hr', joiningdate: '2023-02-01', assignedprojectids: [1] },
+    { id: 6, name: 'Pooja Yadav', email: 'pooja.yadav@gmail.com', phone: 7485963214, status: 'active', position: 'manager', joiningdate: '2024-06-22', assignedprojectids: [2, 3] },
+    { id: 7, name: 'Amit Tripathi', email: 'amit.tripathi@gmail.com', phone: 9365412789, status: 'inactive', position: 'developer', joiningdate: '2022-03-05', assignedprojectids: [1] },
+    { id: 8, name: 'Sakshi Jain', email: 'sakshi.jain@gmail.com', phone: 9658741235, status: 'active', position: 'tester', joiningdate: '2024-10-14', assignedprojectids: [3] },
+    { id: 9, name: 'Deepak Joshi', email: 'deepak.joshi@gmail.com', phone: 8523697412, status: 'active', position: 'developer', joiningdate: '2023-01-19', assignedprojectids: [1, 2] },
+    { id: 10, name: 'Ritika Agarwal', email: 'ritika.agarwal@gmail.com', phone: 9814567230, status: 'inactive', position: 'hr', joiningdate: '2023-12-12', assignedprojectids: [2] },
+    { id: 11, name: 'Siddharth Kapoor', email: 'siddharth.kapoor@gmail.com', phone: 7865142039, status: 'active', position: 'manager', joiningdate: '2022-04-05', assignedprojectids: [3] },
+    { id: 12, name: 'Maya Nair', email: 'maya.nair@gmail.com', phone: 8462310957, status: 'inactive', position: 'developer', joiningdate: '2023-07-12', assignedprojectids: [1, 3] },
+    { id: 13, name: 'Vivek Tiwari', email: 'vivek.tiwari@gmail.com', phone: 9523416578, status: 'active', position: 'manager', joiningdate: '2024-02-25', assignedprojectids: [2] },
+    { id: 14, name: 'Kavita Rao', email: 'kavita.rao@gmail.com', phone: 8641257093, status: 'inactive', position: 'tester', joiningdate: '2023-05-20', assignedprojectids: [3] },
+    { id: 15, name: 'Manish Patil', email: 'manish.patil@gmail.com', phone: 7468159230, status: 'active', position: 'developer', joiningdate: '2024-03-01', assignedprojectids: [1, 2] },
+    { id: 16, name: 'Divya Reddy', email: 'divya.reddy@gmail.com', phone: 8942150367, status: 'inactive', position: 'hr', joiningdate: '2023-06-18', assignedprojectids: [2, 3] },
+    { id: 17, name: 'Nikhil Pandey', email: 'nikhil.pandey@gmail.com', phone: 9462531708, status: 'active', position: 'developer', joiningdate: '2024-08-11', assignedprojectids: [1] },
+    { id: 18, name: 'Sneha Choudhary', email: 'sneha.choudhary@gmail.com', phone: 9871245632, status: 'inactive', position: 'manager', joiningdate: '2023-09-30', assignedprojectids: [3] },
+    { id: 19, name: 'Arun Vyas', email: 'arun.vyas@gmail.com', phone: 9817563421, status: 'active', position: 'tester', joiningdate: '2023-11-24', assignedprojectids: [1, 2] },
+    { id: 20, name: 'Shreya Iyer', email: 'shreya.iyer@gmail.com', phone: 8712456930, status: 'inactive', position: 'developer', joiningdate: '2024-05-15', assignedprojectids: [2] },
+    { id: 21, name: 'Abhishek Dubey', email: 'abhishek.dubey@gmail.com', phone: 9854210367, status: 'active', position: 'developer', joiningdate: '2023-10-10', assignedprojectids: [1, 3] },
+    { id: 22, name: 'Nisha Kulkarni', email: 'nisha.kulkarni@gmail.com', phone: 9875234106, status: 'inactive', position: 'manager', joiningdate: '2024-07-08', assignedprojectids: [3] },
+    { id: 23, name: 'Rohan Malik', email: 'rohan.malik@gmail.com', phone: 9524187630, status: 'active', position: 'tester', joiningdate: '2023-01-05', assignedprojectids: [1] },
+    { id: 24, name: 'Meera Desai', email: 'meera.desai@gmail.com', phone: 8124593607, status: 'inactive', position: 'developer', joiningdate: '2022-12-01', assignedprojectids: [1, 2] },
+    { id: 25, name: 'Aditya Goyal', email: 'aditya.goyal@gmail.com', phone: 8962315074, status: 'active', position: 'developer', joiningdate: '2023-03-12', assignedprojectids: [3] },
+    { id: 26, name: 'Priyanka Bhardwaj', email: 'priyanka.bhardwaj@gmail.com', phone: 9354126078, status: 'inactive', position: 'manager', joiningdate: '2024-06-01', assignedprojectids: [2] },
+    { id: 27, name: 'Yash Chatterjee', email: 'yash.chatterjee@gmail.com', phone: 8542136790, status: 'active', position: 'tester', joiningdate: '2023-07-20', assignedprojectids: [1, 3] },
+    { id: 28, name: 'Lavanya Menon', email: 'lavanya.menon@gmail.com', phone: 9623485710, status: 'inactive', position: 'hr', joiningdate: '2023-02-25', assignedprojectids: [2] },
+    { id: 29, name: 'Suresh Nair', email: 'suresh.nair@gmail.com', phone: 9865324107, status: 'active', position: 'developer', joiningdate: '2024-04-15', assignedprojectids: [3] },
+    { id: 30, name: 'Tanya Bansal', email: 'tanya.bansal@gmail.com', phone: 9532178460, status: 'inactive', position: 'manager', joiningdate: '2024-09-10', assignedprojectids: [2] },
+    { id: 31, name: 'Ajay Srivastava', email: 'ajay.srivastava@gmail.com', phone: 8910234756, status: 'active', position: 'developer', joiningdate: '2023-06-18', assignedprojectids: [1, 2] },
+    { id: 32, name: 'Payal Sinha', email: 'payal.sinha@gmail.com', phone: 9512468073, status: 'inactive', position: 'tester', joiningdate: '2023-05-10', assignedprojectids: [3] },
+    { id: 33, name: 'Harshad Thakur', email: 'harshad.thakur@gmail.com', phone: 8745230169, status: 'active', position: 'manager', joiningdate: '2024-07-14', assignedprojectids: [2] },
+    { id: 34, name: 'Snehal Jadhav', email: 'snehal.jadhav@gmail.com', phone: 9875120463, status: 'inactive', position: 'developer', joiningdate: '2022-09-30', assignedprojectids: [3] },
+    { id: 35, name: 'Gaurav Dixit', email: 'gaurav.dixit@gmail.com', phone: 9472153084, status: 'active', position: 'tester', joiningdate: '2023-08-08', assignedprojectids: [1, 3] },
+    { id: 36, name: 'Shilpa Bhatt', email: 'shilpa.bhatt@gmail.com', phone: 9653412708, status: 'inactive', position: 'developer', joiningdate: '2023-11-12', assignedprojectids: [2] },
+    { id: 37, name: 'Vikas Chaudhary', email: 'vikas.chaudhary@gmail.com', phone: 9876543215, status: 'active', position: 'manager', joiningdate: '2024-05-18', assignedprojectids: [2] },
+    { id: 38, name: 'Anjali Rathore', email: 'anjali.rathore@gmail.com', phone: 8765243109, status: 'inactive', position: 'developer', joiningdate: '2023-04-07', assignedprojectids: [3] },
+    { id: 39, name: 'Rahul Bhagat', email: 'rahul.bhagat@gmail.com', phone: 8547132096, status: 'active', position: 'hr', joiningdate: '2023-01-20', assignedprojectids: [1, 2] },
+    { id: 40, name: 'Kriti Shukla', email: 'kriti.shukla@gmail.com', phone: 9746325108, status: 'inactive', position: 'manager', joiningdate: '2023-12-28', assignedprojectids: [3] },
+  ];
+
+  private projectsData: Project[] = [
+    { id: 1, name: 'TezJS', status: 'active' },
+    { id: 2, name: 'OnPrintShop', status: 'active' },
+    { id: 3, name: 'OmniHR', status: 'active' },
+    { id: 4, name: 'QuickPay', status: 'inactive' },
+    { id: 5, name: 'HealthTrack', status: 'active' },
+  ];
+
+  pageDataLimit = 5;
+
+  employeeStatus = ['active', 'inactive'];
+  projectStatus = ['active', 'inactive', 'completed'];
+  employeePosition = ['manager', 'developer', 'tester', 'hr'];
+
+  constructor(private router: Router) { }
+
+  addEmployee(data: Employee) {
+    let newData = data;
+    let maxid = [...this.employeesData].sort((a, b) => {
+      let id1 = a.id;
+      let id2 = b.id;
+      return id2 - id1;
+    })[0].id;
+    newData.id = maxid + 1;
+    newData.assignedprojectids = [];
+    this.employeesData.push(newData);
+    this.router.navigate(['/employees', newData.id]);
+
+  }
+
+  assignProjectToEmployee(employeeid: number, projectid: number) {
+    let employeeindex = this.employeesData.findIndex((employee: Employee) => employee.id === employeeid);
+    if (employeeindex !== -1) {
+      console.log(this.employeesData[employeeindex].assignedprojectids);
+      this.employeesData[employeeindex].assignedprojectids.push(projectid);
+      console.log(this.employeesData[employeeindex].assignedprojectids);
+    }
+  }
+
+  removeEmployeeFromProject(employeeid: number, projectid: number) {
+    let employeeindex = this.employeesData.findIndex((employee: Employee) => employee.id === employeeid);
+    if (employeeindex !== -1) {
+      let projectidindex = this.employeesData[employeeindex].assignedprojectids.findIndex((id: number) => id === projectid);
+      if (projectidindex !== -1) {
+        this.employeesData[employeeindex].assignedprojectids.splice(projectidindex, 1);
+      }
+    }
+  }
+
+  deleteEmployee(id: number) {
+    let index = this.employeesData.findIndex((employee) => employee.id === id);
+    let name = this.employeesData[index].name;
+    let email = this.employeesData[index].email;
+    let confirmation = confirm(`Are you sure you want to delete employee having name "${name}" and email "${email}"?`);
+    if (index !== -1 && confirmation) {
+      if (this.employeesData[index].status === 'active') {
+        let removeProjectConfirm = confirm(`Do you want to remove "${name}" from all allocated projects?`);
+        if (removeProjectConfirm) {
+          this.employeesData[index].assignedprojectids = [];
+          this.employeesData.splice(index, 1);
+        } else {
+          this.employeesData.splice(index, 1);
+        }
+      } else {
+        alert('Employee is inactive and can\'t be deleted');
+      }
+    }
+  }
+
+  updateEmployeeData(data: Employee, index: number, originalPosition: string, originalEmail: string) {
+    console.log(this.employeesData[index]);
+    if (!data.position) {
+      data.position = originalPosition;
+      data.email = originalEmail;
+    }
+    this.employeesData[index] = data;
+  }
+
+  getEmployeesData() {
+    return this.employeesData.slice().sort((a, b) => {
+      let date1 = new Date(a.joiningdate);
+      let date2 = new Date(b.joiningdate);
+      return date2.getTime() - date1.getTime();
+    });
+  }
+  getProjectsData() {
+    return this.projectsData.slice();
+  }
+}
+
+-------------------------------------------------------------------------------------------------------------
+
+import { Pipe, PipeTransform } from '@angular/core';
+import { Employee, PmsService } from '../services/pms.service';
+
+@Pipe({
+  name: 'page',
+  standalone: true
+})
+export class PagePipe implements PipeTransform {
+  constructor(private pms: PmsService) { }
+  transform(value: Employee[], page: number): Employee[] {
+    let employeeData: Employee[] = value;
+    let result: Employee[] = [];
+    let limit = this.pms.pageDataLimit;
+    let start = 0;
+    let end = limit;
+    if (page !== 1) {
+      start = page * limit - limit;
+      end = page * limit;
+    }
+    result = employeeData.slice(start, end);
+    return result;
+  }
+
+}
+
+-----------------------------------------------------------------------------------------------------------------
+
+import { Pipe, PipeTransform } from '@angular/core';
+import { Employee, PmsService } from '../services/pms.service';
+
+@Pipe({
+  name: 'definePage',
+  standalone: true
+})
+export class DefinePagePipe implements PipeTransform {
+  constructor(private pms: PmsService) { }
+  transform(value: Employee[]): Employee[] {
+    let pages = 1;
+    let limit = this.pms.pageDataLimit;
+    if (value.length > 0) {
+      pages = Math.ceil(value.length / limit);
+    }
+    let result = value.slice(0, pages);
+    return result;
+  }
+
+}
+
+--------------------------------------------------------------------------------------------------------------
+
+import { Component } from '@angular/core';
+import { Employee, PmsService } from '../../services/pms.service';
+import { CommonModule } from '@angular/common';
+import { PagePipe } from '../../pipes/page.pipe';
+import { DefinePagePipe } from '../../pipes/define-page.pipe';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-employees',
+  standalone: true,
+  imports: [CommonModule, FormsModule, PagePipe, DefinePagePipe],
+  templateUrl: './employees.component.html',
+  styleUrl: './employees.component.css'
+})
+export class EmployeesComponent {
+  employeesData!: Employee[];
+  employeeStatus!: string[];
+  employeePosition!: string[];
+  currentPage!: number;
+  lastPage!: number;
+  srNo!: number;
+  searchNameInput = '';
+  selectedStatusFilter = '';
+  selectedPositionFilter = '';
+  isSomethingDeleted = false;
+
+  constructor(private pms: PmsService, private router: Router) { }
+
+  ngOnInit() {
+    this.employeesData = this.pms.getEmployeesData();
+    this.employeeStatus = this.pms.employeeStatus;
+    this.employeePosition = this.pms.employeePosition;
+    this.currentPage = 1;
+    this.lastPage = Math.ceil((this.employeesData.length) / this.pms.pageDataLimit);
+  }
+
+  addEmployee() {
+    this.router.navigate(['/employees', 'new']);
+  }
+
+  deleteEmployee(id: number) {
+    this.isSomethingDeleted = true;
+    this.pms.deleteEmployee(id);
+    this.employeesData = this.pms.getEmployeesData();
+  }
+
+  editEmployee(id: number) {
+    this.router.navigate(['/employees', id, 'edit']);
+  }
+
+  viewEmployee(id: number) {
+    this.router.navigate(['/employees', id]);
+  }
+
+  filterData(parameter: string) {
+    let result: Employee[] = [];
+    this.employeesData = this.pms.getEmployeesData();
+
+    // status 
+    if (parameter === 'status') {
+      this.searchNameInput = '';
+      this.selectedPositionFilter = '';
+      this.employeesData.forEach((employee: Employee) => {
+        if (employee.status === this.selectedStatusFilter) {
+          result.push(employee);
+        }
+      })
+    }
+
+    // position 
+    if (parameter === 'position') {
+      this.searchNameInput = '';
+      this.selectedStatusFilter = '';
+      this.employeesData.forEach((employee: Employee) => {
+        if (employee.position === this.selectedPositionFilter) {
+          result.push(employee);
+        }
+      })
+    }
+
+    // name 
+    if (parameter === 'name/email') {
+      this.selectedPositionFilter = '';
+      this.selectedStatusFilter = '';
+      if (this.searchNameInput.trim()) {
+        this.employeesData.forEach((employee: Employee) => {
+          if (employee.name.toLowerCase().includes(this.searchNameInput.trim().toLowerCase()) ||
+            employee.email.toLowerCase().includes(this.searchNameInput.trim().toLowerCase())) {
+            result.push(employee);
+          }
+        })
+      } else {
+        result = this.pms.getEmployeesData();
+      }
+    }
+
+    this.employeesData = result;
+    this.updateLimit();
+  }
+
+  getSrNo(index: number, page: number) {
+    return (page - 1) * this.pms.pageDataLimit + index + 1;
+  }
+
+  incrementPage() {
+    if (this.currentPage < this.lastPage) {
+      this.currentPage += 1;
+    }
+  }
+
+  decrementPage() {
+    if (this.currentPage > 1) {
+      this.currentPage -= 1;
+    }
+  }
+
+  goToPage(page: number) {
+    this.currentPage = page;
+  }
+
+  updateLimit() {
+    this.currentPage = 1;
+    this.lastPage = Math.ceil(this.employeesData.length / this.pms.pageDataLimit);
+  }
+
+  checkDataLength() {
+    if (this.employeesData.length < this.pms.pageDataLimit) {
+      this.currentPage = 1
+    }
+  }
+}
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+<!-- table  -->
+    <div class="d-flex justify-content-center align-items-center mx-2 my-3" id="tableDiv">
+        <!-- {{employeesData.length>0}} -->
+        <table class="table table-responsive w-75">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <!-- <th scope="col">ID</th> -->
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Position</th>
+                    <th scope="col">Date Of Joining</th>
+                    <th scope="col" class="">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let employee of employeesData | page:currentPage;let i=index">
+                    <ng-container *ngIf="employeesData.length>0;">
+                        <tr (click)="viewEmployee(employee.id)">
+                            <th scope="row" class="pointer">{{getSrNo(i,currentPage)}}</th>
+                            <!-- <td>{{employee.id}}</td> -->
+                            <td class="pointer">{{employee.name}}</td>
+                            <td class="pointer">{{employee.email}}</td>
+                            <td class="pointer">{{employee.status}}</td>
+                            <td class="pointer">{{employee.position}}</td>
+                            <td class="pointer">{{employee.joiningdate}}</td>
+                            <td (click)="$event.stopPropagation()">
+                                <button class="btn btn-primary" (click)="viewEmployee(employee.id)">View</button>
+                                <button class="btn btn-success ms-1" (click)="editEmployee(employee.id)">Edit</button>
+                                <button class="btn btn-danger ms-1" (click)="deleteEmployee(employee.id)">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="employeesData.length==0">
+                    <tr>
+                        <td colspan="7" class="text-center">No data found</td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- pagination -->
+    <div class="mx-2 my-5 d-flex justify-content-center align-items-center">
+        <nav aria-label="...">
+            <ul class="pagination">
+                <li class="page-item" (click)="decrementPage()">
+                    <a class="page-link" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+
+                <li *ngFor="let employee of employeesData | definePage;let i=index" class="page-item"
+                    [ngClass]="{'active':currentPage===i+1}">
+                    <a class="page-link" (click)="goToPage(i+1)" [id]="i+1" routerLinkActive="active">{{i+1}}</a>
+                </li>
+
+                <li class="page-item" (click)="incrementPage()">
+                    <a class="page-link" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
